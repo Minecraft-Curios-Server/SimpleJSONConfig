@@ -26,8 +26,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -58,7 +58,7 @@
 
     <repositories>
         <repository>
-            <id>spigotmc-repo</id>
+            <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
@@ -68,12 +68,12 @@
     </repositories>
 
     <dependencies>
-        <!--<dependency>
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
@@ -94,22 +94,5 @@
             <scope>compile</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/net.kyori/adventure-api -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-api</artifactId>
-            <version>4.8.1</version>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-legacy</artifactId>
-            <version>4.8.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>paper</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/paper-1.16.5.jar</systemPath>
-        </dependency>
     </dependencies>
 </project>

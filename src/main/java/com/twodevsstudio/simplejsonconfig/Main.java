@@ -39,8 +39,8 @@ public class Main extends JavaPlugin {
         ItemStack itemStack = new ItemStack(Material.DIRT);
         ItemMeta itemMeta = itemStack.getItemMeta();
         
-        itemMeta.displayName(Utils.coloredComponent("&6This is Dirt"));
-        itemMeta.lore(Utils.coloredComponent(Arrays.asList("&6This is Lore #1", "&6This is Lore #2")));
+        itemMeta.setDisplayName(Utils.colored("&6This is Dirt"));
+        itemMeta.setLore(Utils.colored(Arrays.asList("&6This is Lore #1", "&6This is Lore #2")));
         itemMeta.addAttributeModifier(
                 Attribute.GENERIC_LUCK, new AttributeModifier("LUCK", 10, AttributeModifier.Operation.ADD_NUMBER));
         itemStack.setItemMeta(itemMeta);
