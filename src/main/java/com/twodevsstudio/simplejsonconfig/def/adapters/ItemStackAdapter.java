@@ -185,7 +185,7 @@ public class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserial
     @NotNull
     private AttributeModifier fromRawModifier(Map<String, Object> rawModifier) {
         
-        UUID modifierUUID = UUID.fromString(String.valueOf(rawModifier.get("uuid")));
+        UUID modifierUUID = UUID.randomUUID();
         String modifierName = String.valueOf(rawModifier.get("name"));
         double modifierAmount = (double) rawModifier.get(AMOUNT_MEMBER);
         Operation modifierOperation = Operation.valueOf(String.valueOf(rawModifier.get("operation")));
