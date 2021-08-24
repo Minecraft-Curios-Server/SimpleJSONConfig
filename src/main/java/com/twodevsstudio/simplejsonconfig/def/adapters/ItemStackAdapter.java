@@ -15,8 +15,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
 
 public class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserializer<ItemStack> {
     
@@ -140,6 +138,7 @@ public class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserial
             meta.setLore(Utils.colored(lore));
         }
         
+        
         Map<String, Object> attributes = (Map<String, Object>) rawMeta.getOrDefault(ATTRIBUTES_MEMBER, new HashMap<>());
         deserializeAttributes(attributes, meta);
         item.setItemMeta(meta);
@@ -175,6 +174,7 @@ public class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserial
     
     private void deserializeAttributes(Map<String, Object> attributes, ItemMeta meta) {
         
+        Set<UUID> uuidsInUse = new HashSet<>();
         for (Map.Entry<String, Object> entry : attributes.entrySet()) {
             
             String attributeName = entry.getKey();
@@ -183,19 +183,23 @@ public class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserial
             List<Map<String, Object>> rawModifiers = (List<Map<String, Object>>) entry.getValue();
             List<AttributeModifier> modifiers = new ArrayList<>();
             
-            rawModifiers.forEach(rawModifier -> modifiers.add(fromRawModifier(rawModifier, modifiers)));
+            for (Map<String, Object> rawModifier : rawModifiers) {
+                deserializeModifier(rawModifier, modifiers, uuidsInUse);
+            }
             modifiers.forEach(modifier -> meta.addAttributeModifier(attribute, modifier));
         }
     }
     
-    @NotNull
-    private AttributeModifier fromRawModifier(Map<String, Object> rawModifier, List<AttributeModifier> modifiers) {
+    private void deserializeModifier(Map<String, Object> rawModifier,
+                                     List<AttributeModifier> modifiers,
+                                     Set<UUID> uuidsInUse
+    ) {
         
-        Stream<UUID> uuidsInUse = modifiers.stream().map(AttributeModifier::getUniqueId);
-        AtomicReference<UUID> modifierUUID = new AtomicReference<>(UUID.fromString((String) rawModifier.get("uuid")));
-        if (uuidsInUse.anyMatch(uuid -> uuid.equals(modifierUUID.get()))) {
-            modifierUUID.set(UUID.randomUUID());
+        UUID modifierUUID = UUID.fromString((String) rawModifier.get("uuid"));
+        if (uuidsInUse.contains(modifierUUID)) {
+            modifierUUID = UUID.randomUUID();
         }
+        uuidsInUse.add(modifierUUID);
         
         String modifierName = String.valueOf(rawModifier.get("name"));
         double modifierAmount = (double) rawModifier.get(AMOUNT_MEMBER);
@@ -207,6 +211,7 @@ public class ItemStackAdapter implements JsonSerializer<ItemStack>, JsonDeserial
             modifierSlot = EquipmentSlot.valueOf(String.valueOf(rawSlot));
         }
         
-        return new AttributeModifier(modifierUUID.get(), modifierName, modifierAmount, modifierOperation, modifierSlot);
+        modifiers.add(
+                new AttributeModifier(modifierUUID, modifierName, modifierAmount, modifierOperation, modifierSlot));
     }
 }
