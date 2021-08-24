@@ -36,6 +36,7 @@ public class Main extends JavaPlugin {
     ) {
         
         Player player = (Player) sender;
+/*
         ItemStack itemStack = new ItemStack(Material.DIRT);
         ItemMeta itemMeta = itemStack.getItemMeta();
         
@@ -47,13 +48,14 @@ public class Main extends JavaPlugin {
         
         player.getInventory().addItem(itemStack);
         
-        File file = new File("test.json");
+        
+        serializer.saveConfig(itemStack, file);
+*/
         GsonBuilder gsonBuilder = new DefaultGsonBuilder().getGsonBuilder();
         Serializer serializer = Serializer.getInst();
         serializer.setGson(gsonBuilder.create());
-        
-        serializer.saveConfig(itemStack, file);
-        
+        File file = new File("test.json");
+    
         ItemStack load = serializer.loadConfig(ItemStack.class, file);
         
         player.getInventory().addItem(load);

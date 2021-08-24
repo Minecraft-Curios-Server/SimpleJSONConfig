@@ -41,6 +41,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <outputFile>${project.basedir}/Server/plugins/${project.artifactId}.jar</outputFile>
                             <createDependencyReducedPom>true</createDependencyReducedPom>
                             <minimizeJar>true</minimizeJar>
                         </configuration>
